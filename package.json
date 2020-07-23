@@ -1,0 +1,22 @@
+{
+  "name": "facial-attendace",
+  "version": "1.0.0",
+  "description": "security system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neeraj0786/Facial-Attendance-and-Security-System.git"
+  },
+  "author": "Neeraj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/neeraj0786/Facial-Attendance-and-Security-System/issues"
+  },
+  "homepage": "https://github.com/neeraj0786/Facial-Attendance-and-Security-System#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
