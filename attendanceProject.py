@@ -3,7 +3,9 @@ import numpy as np
 import face_recognition
 import os
 from datetime import datetime
+import sys
 
+matched = 0
 path='ImageAttendance'
 Images=[]
 classNames=[]
@@ -34,7 +36,9 @@ encodeList=findEncoding(Images)
 print('Encoding Complete')
 
 cap=cv2.VideoCapture(0)
-while 1:
+i=0
+while i<50:
+    i=i+1
     success,img=cap.read()
     imgS=cv2.resize(img,(0,0),None,0.50,0.50)
     imgS=cv2.cvtColor(imgS,cv2.COLOR_BGR2RGB)
@@ -46,6 +50,7 @@ while 1:
         print(facedis)
         matchIndex=np.argmin(facedis)
         if matches[matchIndex]:
+            matched=1
             print('You are '+classNames[matchIndex])
             markAttendance(classNames[matchIndex])
             y2,x1,y1,x2 =faceLoc
@@ -55,3 +60,11 @@ while 1:
             cv2.putText(img,classNames[matchIndex],(x1+6,y1+6),cv2.FONT_HERSHEY_COMPLEX,1,(255,0,255),2)
     cv2.imshow('Webcam',img)
     cv2.waitKey(1)
+    if matched :
+        sys.exit(1)
+sys.exit(0)
+
+
+
+
+

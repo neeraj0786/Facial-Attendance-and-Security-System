@@ -14,26 +14,40 @@ app.listen(3000, function() {
 app.get('/', callName);
 
 function callName(req, res) {
-
+   // res.redirect('https://us04web.zoom.us/j/3100988987?pwd=oeoDAU6FX1A');
 	// Use child_process.spawn method from
 	// child_process module and assign it
 	// to variable spawn
-	var spawn = require("child_process").spawn;
 
+	var spawn = require("child_process").spawn;
+    let matched=false;
 	// Parameters passed in spawn -
 	// 1. type_of_script
 	// 2. list containing Path of the script
 	// and arguments for the script
+    var process = spawn('python',["./attendanceProject.py"]);
+
+    process.on('exit', (code,matched)=>{
+    if(code === 1)
+    matched = true;
+    else matched=false;
+    console.log(matched,code);
+    if(matched) res.redirect('https://us04web.zoom.us/j/3100988987?pwd=oeoDAU6FX1A');
+    else res.redirect('https://www.google.com');
+    })
+
+
+
 
 	// E.g : http://localhost:3000/name?firstname=Mike&lastname=Will
 	// so, first name = Mike and last name = Will
-	var process = spawn('python',["./attendanceProject.py"] );
 
 	// Takes stdout data from script which executed
 	// with arguments and send this data to res object
-	process.stdout.on('data', function(data) {
+	/*process.stdout.on('data', function(data) {
 		res.send(data.toString());
-	} )
+	} );*/
+
 }
 
 
