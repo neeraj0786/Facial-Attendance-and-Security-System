@@ -4,25 +4,15 @@ import face_recognition
 import os
 from datetime import datetime
 import sys
+from joblib import dump ,load
 
 matched = 0
 path='ImageAttendance'
-Images=[]
-classNames=[]
 myList=os.listdir(path)
 print(myList)
-for i in myList:
-    currImg=cv2.imread(f'{path}/{i}')
-    Images.append(currImg)
-    classNames.append(i.split('.')[0])
+classNames=load('names.joblib')
 print(classNames)
-formatTime='%D:%H:%M:%S'
-def findEncoding(images):
-    encodeList=[]
-    for i in images:
-        i=cv2.cvtColor(i,cv2.COLOR_BGR2RGB)
-        encodeList.append(face_recognition.face_encodings(i)[0])
-    return encodeList
+formatTime='%D -- %H:%M:%S'
 def markAttendance(name):
     with open('Attendance.csv','r+') as f:
         myList=f.readlines()
@@ -31,13 +21,53 @@ def markAttendance(name):
             nameList.append(i.split(',')[0])
         if name not in nameList:
             f.writelines(f'\n{name},{datetime.now().strftime(formatTime)}')
+def readEncodings():
+    with open('encodings.csv', 'r+') as f:
+        mainList=f.readlines()
+        print(mainList)
+        resList=[[]]
+        tempList=[]
+        for i in mainList:
+            line = i.split(' ')
+            for j in line :
+                str = ""
+                for k in j:
+                    if k == '[':
+                        continue
+                    elif k == ']':
+                        tempList.append(str)
+                        resList.append(tempList)
+                        tempList.clear()
+                        str=""
+                    else :
+                        str+=k
+                if len(str) >0 :
+                    tempList.append(str)
 
-encodeList=findEncoding(Images)
+        #print(resList)
+                
+                
+        #print(tempList)
+
+#print('demo Encodings List')
+#readEncodings()
+
+#encodeList=findEncoding(Images)
 print('Encoding Complete')
+#print('Actual Encodings')
+#print(encodeList)
+#dump(encodeList, 'enc.joblib')
+encodeList = load('enc.joblib')
+#print(encodeList)
+def writeEncodings(lis):
+    with open('encodings.csv', 'r+') as f:
+        for i in lis:
+            f.write(f'{i}')
+#writeEncodings(encodeList)
 
 cap=cv2.VideoCapture(0)
 i=0
-while i<50:
+while matched==0:
     i=i+1
     success,img=cap.read()
     imgS=cv2.resize(img,(0,0),None,0.50,0.50)
