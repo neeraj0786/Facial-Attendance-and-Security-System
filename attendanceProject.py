@@ -67,7 +67,7 @@ def writeEncodings(lis):
 
 cap=cv2.VideoCapture(0)
 i=0
-while matched==0:
+while i<100:
     i=i+1
     success,img=cap.read()
     imgS=cv2.resize(img,(0,0),None,0.50,0.50)
